@@ -8,7 +8,7 @@ class NewsContainer extends Component {
         super(props);
         this.state = { 
             articles: [],
-            filteredArticles: []
+            filteredArticles: [],
          }
          this.filterArticles = this.filterArticles.bind(this)
     }
@@ -52,8 +52,6 @@ class NewsContainer extends Component {
             filteredArticles
         })
     }
-
-
 
 
     render() { 
