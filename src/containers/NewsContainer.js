@@ -8,10 +8,32 @@ class NewsContainer extends Component {
          }
     }
 
-    componentDidMount() {
+    componentDidMount(){
 
-        const articleIds = 'https://hacker-news.firebaseio.com/v0/topstories.json'
+        const idUrl = 'https://hacker-news.firebaseio.com/v0/topstories.json'
+
+        fetch(idUrl)
+        .then(res => res.json())
+        .then(articleIds => {
+
+            const first10ArticleIds = articleIds.slice(0, 10)
+            const articleUrls = first10ArticleIds.map(articleId => {
+                return `https://hacker-news.firebaseio.com/v0/item/${articleId}.json`
+            })
+
+            Promise.all(articleUrls.map(articleUrl => {
+                return fetch(articleUrl)
+                .then(res => res.json())
+            }))
+            .then(articles => {
+                this.setState({articles})
+            })
+
+        })
+
     }
+
+
 
 
     render() { 
