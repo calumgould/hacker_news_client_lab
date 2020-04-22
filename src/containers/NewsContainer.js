@@ -1,11 +1,16 @@
 import React, { Component } from 'react';
+import NewsList from '../components/NewsList'
+import FilterForm from '../components/FilterForm'
+
 
 class NewsContainer extends Component {
     constructor(props) {
         super(props);
         this.state = { 
-            articles: []
+            articles: [],
+            filteredArticles: []
          }
+         this.filterArticles = this.filterArticles.bind(this)
     }
 
     componentDidMount(){
@@ -26,11 +31,26 @@ class NewsContainer extends Component {
                 .then(res => res.json())
             }))
             .then(articles => {
-                this.setState({articles})
+                this.setState({
+                    articles: articles,
+                    filteredArticles: articles
+                })
             })
 
         })
 
+    }
+
+    filterArticles(newsFilter) {
+        let filteredArticles = this.state.articles
+        filteredArticles = filteredArticles.filter((article) => {
+            let articleName = article.title.toLowerCase()
+            return articleName.indexOf(
+                newsFilter.toLowerCase()) !== -1
+        })
+        this.setState({
+            filteredArticles
+        })
     }
 
 
@@ -39,7 +59,9 @@ class NewsContainer extends Component {
     render() { 
         return ( 
             <div>
-                <h2>News Container</h2>
+                <h1>Top Stories</h1>
+                <FilterForm onChange={this.filterArticles}/>
+                <NewsList articles={this.state.filteredArticles} />
             </div>
          );
     }
